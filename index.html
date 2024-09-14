@@ -152,9 +152,15 @@
             consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure the focus stays on the last line
         }
 
-        document.addEventListener('keydown', function(event) {
+        visibleInput.addEventListener('input', function(event) {
+            currentInput = visibleInput.value;
+            updateInput();
+        });
+
+        visibleInput.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 executeCommand();
+                visibleInput.value = ''; // Clear the visible input field
             } else if (event.key === 'Backspace') {
                 currentInput = currentInput.slice(0, -1);
                 updateInput();
@@ -177,9 +183,6 @@
                     }
                     updateInput();
                 }
-            } else if (event.key.length === 1) {
-                currentInput += event.key;
-                updateInput();
             }
         });
 
