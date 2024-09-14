@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang=hu">
 <head>
-    meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:description" content='KKSZKI INDULÓ'>
     <link rel="stylesheet" href="style.css">
@@ -10,43 +10,50 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
     <title>KKSZKI INDULÓ</title>
     <style>
-    
-        #myInput {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-top: 2px solid #4AA;
-            box-sizing: border-box;
-            font-family: 'Cousine', monospace;
-        }
-        .cursor {
+         .cursor {
             animation: blink 1s step-end infinite;
         }
-        @keyframes blink {
-            from, to { visibility: visible; }
-            50% { visibility: hidden; }
+        body {
+            overflow: hidden;
         }
+       
         @media only screen and (max-width: 768px) {
-            body {
-                font-size: 14px;
-            }
-            .console {
-                width: 100%;
-                padding: 5px;
-            }
-        }
+    body {
+        font-size: 14px;
+    }
+
+    .console {
+        width: 95%;
+        padding: 5px;
+    }
+
+    .consolebody {
+        height: 200px;
+    }
+}
+
+@keyframes blink {
+    from, to {
+        visibility: visible;
+    }
+    50% {
+        visibility: hidden;
+    }
+}
     </style>
 </head>
-<body>
+<body> 
     <div class="console">
+        <header>
+            guest@kkszki.local
+        </header>
         <div class="consolebody" id="consolebody">
-            <p>guest@kkszki.local</p>
             <p>> írd be a help parancsok listájának megtekintéséhez</p>
+
         </div>
-        <input type="text" id="myInput" autocomplete="off" autofocus>
     </div>
 
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
@@ -54,105 +61,141 @@
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const consoleBody = document.getElementById('consolebody');
-        const inputField = document.getElementById('myInput');
         let currentInput = '';
         const disclaimerText = 'Igen is vannak bugok a weboldalon de ha valami történik egy oldal refresh megoldhatja a problémát';
         const audioPlayer = document.getElementById('audio-player');
         const commandHistory = [];
         let historyIndex = -1;
         
+        function createInputLine() {
+            const inputLine = document.createElement('p');
+            inputLine.innerHTML = '> <span class="current-input"></span><span class="cursor">█</span>';
+            consoleBody.appendChild(inputLine);
+            consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure scroll goes to the bottom
+            return inputLine;
+        }
+
+        function updateInput() {
+            const currentInputSpans = consoleBody.querySelectorAll('.current-input');
+            const currentInputSpan = currentInputSpans[currentInputSpans.length - 1];
+            if (currentInputSpan) {
+                currentInputSpan.textContent = currentInput;
+            }
+        }
+
         function addOutputLine(text) {
             const outputLine = document.createElement('p');
             outputLine.textContent = text;
-            consoleBody.appendChild(outputLine);
-            consoleBody.scrollTop = consoleBody.scrollHeight;
+            consoleBody.insertBefore(outputLine, consoleBody.lastChild); // Insert before the input line
+            consoleBody.scrollTop = consoleBody.scrollHeight; // Scroll to bottom after output
         }
 
-        function executeCommand(command) {
-            addOutputLine(`> ${command}`);
+        function executeCommand() {
+            addOutputLine(`> ${currentInput}`);
             
-            if (command.toLowerCase() === 'help') {
-                addOutputLine('Elérhető parancsok: help, clear, echo [szöveg], date, time, whoami, disclaimer, play, stop, whomade');
-            } else if (command.toLowerCase() === 'disclaimer') {
+            if (currentInput.toLowerCase() === 'help') {
+                addOutputLine('Elérhető parancsok: help, clear, echo [szöveg], date, time, whoami, disclaimer, play, stop, whomade ');
+            } else if (currentInput.toLowerCase() === 'disclaimer') {
                 addOutputLine(disclaimerText);
-            } else if (command.toLowerCase() === 'clear') {
-                consoleBody.innerHTML = '';
-            } else if (command.toLowerCase().startsWith('echo ')) {
-                addOutputLine(command.slice(5));
-            } else if (command.toLowerCase() === 'date') {
-                addOutputLine(new Date().toLocaleDateString());
-            } else if (command.toLowerCase() === 'time') {
-                addOutputLine(new Date().toLocaleTimeString());
-            } else if (command.toLowerCase() === 'whoami') {
+            } else if (currentInput.toLowerCase() === 'clear') {
+                consoleBody.innerHTML = ''; // Clear the console
+                createInputLine(); // Recreate the input line
+            } else if (currentInput.toLowerCase().startsWith('echo ')) {
+                addOutputLine(currentInput.slice(5));
+            } else if (currentInput.toLowerCase() === 'date') {
+                const date = new Date().toLocaleDateString();
+                addOutputLine(date);
+            } else if (currentInput.toLowerCase() === 'time') {
+                const time = new Date().toLocaleTimeString();
+                addOutputLine(time);
+            } else if (currentInput.toLowerCase() === 'whoami') {
                 addOutputLine('student');
-            } else if (command.toLowerCase() === 'play') {
+            } else if (currentInput.toLowerCase() === 'play') {
                 audioPlayer.play();
                 addOutputLine('Zene lejátszódik... "stop"-al lehet megállitani');
-            } else if (command.toLowerCase() === 'stop') {
-                if (!audioPlayer.paused) {
-                    audioPlayer.pause();
-                    audioPlayer.currentTime = 0;
-                    addOutputLine('A zene megállt');
-                } else {
-                    addOutputLine('A zene nem játszik, így nem lehet megállítani.');
-                }
-            } else if (command.toLowerCase() === 'whomade') {
+            } else if (currentInput.toLowerCase() === 'stop') {
+        if (!audioPlayer.paused) {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            addOutputLine('A zene megállt');
+        } else {
+            addOutputLine('A zene nem játszik, így nem lehet megállítani.');
+        }
+            } else if (currentInput.toLowerCase() === 'whomade') {
                 addOutputLine('@zsombi9.b');
-            } else if (command.trim() !== '') {
-                addOutputLine(`Ismeretlen parancs: ${command}`);
+            } else if (currentInput.trim() !== '') {
+                addOutputLine(`Ismeretlen parancs: ${currentInput}`);
             }
             
-            if (command.trim() !== '') {
-                commandHistory.push(command);
+            // Add the command to the history
+            if (currentInput.trim() !== '') {
+                commandHistory.push(currentInput);
             }
             
-            historyIndex = -1;
-            inputField.value = '';
+            currentInput = '';  // Clear the current input
+            historyIndex = -1;  // Reset history index
+            updateInput();
+            consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure the focus stays on the last line
         }
 
-        inputField.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
-                executeCommand(inputField.value);
+                executeCommand();
+            } else if (event.key === 'Backspace') {
+                currentInput = currentInput.slice(0, -1);
+                updateInput();
             } else if (event.key === 'ArrowUp') {
                 if (commandHistory.length > 0) {
                     if (historyIndex < commandHistory.length - 1) {
                         historyIndex++;
                     }
-                    inputField.value = commandHistory[commandHistory.length - 1 - historyIndex];
+                    currentInput = commandHistory[commandHistory.length - 1 - historyIndex];
+                    updateInput();
                 }
             } else if (event.key === 'ArrowDown') {
                 if (commandHistory.length > 0) {
                     if (historyIndex > 0) {
                         historyIndex--;
-                        inputField.value = commandHistory[commandHistory.length - 1 - historyIndex];
+                        currentInput = commandHistory[commandHistory.length - 1 - historyIndex];
                     } else {
                         historyIndex = -1;
-                        inputField.value = '';
+                        currentInput = '';
                     }
+                    updateInput();
                 }
+            } else if (event.key.length === 1) {
+                currentInput += event.key;
+                updateInput();
             }
         });
+        createInputLine(); // Initial line creation
 
-        // Mobilbarát funkciók
-        inputField.focus();
-
-        document.body.addEventListener('focusout', function(e) {
-            if (e.relatedTarget !== inputField) {
-                setTimeout(function() {
-                    inputField.focus();
-                }, 0);
+        // Cursor blinking effect
+        setInterval(() => {
+            const cursor = document.querySelector('.cursor');
+            if (cursor) {
+                cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
             }
-        });
+        }, 500);
 
-        function resizeConsole() {
-            var viewportHeight = window.innerHeight;
-            var inputHeight = inputField.offsetHeight;
-            consoleBody.style.height = (viewportHeight - inputHeight) + 'px';
+    // Mobilbarát funkciók
+    function focusInput() {
+        const inputSpan = document.querySelector('.current-input');
+        if (inputSpan) {
+            inputSpan.focus();
         }
+    }
 
-        window.addEventListener('resize', resizeConsole);
-        resizeConsole();
-    });
+    document.body.addEventListener('click', focusInput);
+
+    // Virtuális billentyűzet kezelése mobilon
+    consoleBody.addEventListener('focus', function() {
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+        }
+    }, true);
+});
     </script>
 </body>
 </html>
