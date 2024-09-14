@@ -13,7 +13,7 @@
 
     <title>KKSZKI INDULÓ</title>
     <style>
-         .cursor {
+        .cursor {
             animation: blink 1s step-end infinite;
         }
         body {
@@ -32,6 +32,25 @@
 
             .consolebody {
                 height: 200px;
+            }
+
+            /* Button styling for mobile view */
+            .keyboard-button {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: #333;
+                color: white;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                cursor: pointer;
+                z-index: 1000;
             }
         }
 
@@ -66,6 +85,9 @@
 
     <!-- Láthatatlan input mező -->
     <input type="text" id="hidden-input" class="hidden-input" autofocus disabled>
+
+    <!-- Keyboard button for mobile view -->
+    <button class="keyboard-button" id="keyboard-button">⌨️</button>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -205,6 +227,12 @@
         // Scroll terminal up when keyboard appears
         window.addEventListener('resize', function() {
             consoleBody.scrollTop = consoleBody.scrollHeight;
+        });
+
+        // Handle keyboard button click
+        const keyboardButton = document.getElementById('keyboard-button');
+        keyboardButton.addEventListener('click', function() {
+            hiddenInput.focus();
         });
     });
     </script>
