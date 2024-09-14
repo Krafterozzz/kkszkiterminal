@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=hu">
+<html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,65 +13,73 @@
 
     <title>KKSZKI INDULÓ</title>
     <style>
-         .cursor {
+        .cursor {
             animation: blink 1s step-end infinite;
         }
         body {
             overflow: hidden;
+            position: relative;
         }
-       
+        .console {
+            position: relative;
+            width: 95%;
+            padding: 5px;
+            margin-bottom: 50px;
+        }
+        .consolebody {
+            height: 200px;
+            overflow-y: auto;
+        }
         @media only screen and (max-width: 768px) {
-    body {
-        font-size: 14px;
-    }
-
-    .console {
-        width: 95%;
-        padding: 5px;
-    }
-
-    .consolebody {
-        height: 200px;
-    }
-}
-
-@keyframes blink {
-    from, to {
-        visibility: visible;
-    }
-    50% {
-        visibility: hidden;
-    }
-}
+            body {
+                font-size: 14px;
+            }
+            .console {
+                width: 95%;
+                padding: 5px;
+            }
+            .consolebody {
+                height: 200px;
+            }
+        }
+        @keyframes blink {
+            from, to {
+                visibility: visible;
+            }
+            50% {
+                visibility: hidden;
+            }
+        }
     </style>
 </head>
 <body> 
     <div class="console">
-        <header>
-            guest@kkszki.local
-        </header>
+        <header>guest@kkszki.local</header>
         <div class="consolebody" id="consolebody">
             <p>> írd be a help parancsok listájának megtekintéséhez</p>
-
         </div>
     </div>
 
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
 
+    <!-- Rejtett input mező, ami a billentyűzetet aktiválja -->
+    <input type="text" id="hiddenInput" style="position: absolute; top: -1000px;">
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const consoleBody = document.getElementById('consolebody');
+        const hiddenInput = document.getElementById('hiddenInput');
         let currentInput = '';
         const disclaimerText = 'Igen is vannak bugok a weboldalon de ha valami történik egy oldal refresh megoldhatja a problémát';
         const audioPlayer = document.getElementById('audio-player');
         const commandHistory = [];
         let historyIndex = -1;
-        
+
         function createInputLine() {
             const inputLine = document.createElement('p');
             inputLine.innerHTML = '> <span class="current-input"></span><span class="cursor">█</span>';
             consoleBody.appendChild(inputLine);
-            consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure scroll goes to the bottom
+            consoleBody.scrollTop = consoleBody.scrollHeight;
             return inputLine;
         }
 
@@ -86,20 +94,19 @@
         function addOutputLine(text) {
             const outputLine = document.createElement('p');
             outputLine.textContent = text;
-            consoleBody.insertBefore(outputLine, consoleBody.lastChild); // Insert before the input line
-            consoleBody.scrollTop = consoleBody.scrollHeight; // Scroll to bottom after output
+            consoleBody.insertBefore(outputLine, consoleBody.lastChild);
+            consoleBody.scrollTop = consoleBody.scrollHeight;
         }
 
         function executeCommand() {
             addOutputLine(`> ${currentInput}`);
-            
             if (currentInput.toLowerCase() === 'help') {
                 addOutputLine('Elérhető parancsok: help, clear, echo [szöveg], date, time, whoami, disclaimer, play, stop, whomade ');
             } else if (currentInput.toLowerCase() === 'disclaimer') {
                 addOutputLine(disclaimerText);
             } else if (currentInput.toLowerCase() === 'clear') {
-                consoleBody.innerHTML = ''; // Clear the console
-                createInputLine(); // Recreate the input line
+                consoleBody.innerHTML = '';
+                createInputLine();
             } else if (currentInput.toLowerCase().startsWith('echo ')) {
                 addOutputLine(currentInput.slice(5));
             } else if (currentInput.toLowerCase() === 'date') {
@@ -114,28 +121,27 @@
                 audioPlayer.play();
                 addOutputLine('Zene lejátszódik... "stop"-al lehet megállitani');
             } else if (currentInput.toLowerCase() === 'stop') {
-        if (!audioPlayer.paused) {
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-            addOutputLine('A zene megállt');
-        } else {
-            addOutputLine('A zene nem játszik, így nem lehet megállítani.');
-        }
+                if (!audioPlayer.paused) {
+                    audioPlayer.pause();
+                    audioPlayer.currentTime = 0;
+                    addOutputLine('A zene megállt');
+                } else {
+                    addOutputLine('A zene nem játszik, így nem lehet megállítani.');
+                }
             } else if (currentInput.toLowerCase() === 'whomade') {
                 addOutputLine('@zsombi9.b');
             } else if (currentInput.trim() !== '') {
                 addOutputLine(`Ismeretlen parancs: ${currentInput}`);
             }
-            
-            // Add the command to the history
+
             if (currentInput.trim() !== '') {
                 commandHistory.push(currentInput);
             }
-            
-            currentInput = '';  // Clear the current input
-            historyIndex = -1;  // Reset history index
+
+            currentInput = '';
+            historyIndex = -1;
             updateInput();
-            consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure the focus stays on the last line
+            consoleBody.scrollTop = consoleBody.scrollHeight;
         }
 
         document.addEventListener('keydown', function(event) {
@@ -168,34 +174,26 @@
                 updateInput();
             }
         });
-        createInputLine(); // Initial line creation
 
-        // Cursor blinking effect
+        createInputLine();
+
+        // Billentyűzet automatikus felhozatala és a konzolablak felugrasztása
+        hiddenInput.focus();
+        hiddenInput.addEventListener('focus', () => {
+            consoleBody.style.marginBottom = '200px'; // Konzolablak felfelé mozgatása
+        });
+
+        hiddenInput.addEventListener('blur', () => {
+            hiddenInput.focus(); // Ne lehessen bezárni a billentyűzetet
+        });
+
         setInterval(() => {
             const cursor = document.querySelector('.cursor');
             if (cursor) {
                 cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
             }
         }, 500);
-
-    // Mobilbarát funkciók
-    function focusInput() {
-        const inputSpan = document.querySelector('.current-input');
-        if (inputSpan) {
-            inputSpan.focus();
-        }
-    }
-
-    document.body.addEventListener('click', focusInput);
-
-    // Virtuális billentyűzet kezelése mobilon
-    consoleBody.addEventListener('focus', function() {
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            window.scrollTo(0, 0);
-            document.body.scrollTop = 0;
-        }
-    }, true);
-});
+    });
     </script>
 </body>
 </html>
