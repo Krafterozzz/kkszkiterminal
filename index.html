@@ -13,41 +13,28 @@
 
     <title>KKSZKI INDULÓ</title>
     <style>
+
+        /* Láthatatlan input */
+        input[type="text"] {
+            position: absolute;
+            top: -1000px;
+        }
+
         .cursor {
             animation: blink 1s step-end infinite;
         }
-        body {
-            overflow: hidden;
-            position: relative;
-        }
-        .console {
-            position: relative;
-            width: 95%;
-            padding: 5px;
-            margin-bottom: 50px;
-        }
-        .consolebody {
-            height: 200px;
-            overflow-y: auto;
-        }
-        @media only screen and (max-width: 768px) {
-            body {
-                font-size: 14px;
-            }
-            .console {
-                width: 95%;
-                padding: 5px;
-            }
-            .consolebody {
-                height: 200px;
-            }
-        }
+
         @keyframes blink {
-            from, to {
-                visibility: visible;
-            }
             50% {
                 visibility: hidden;
+            }
+        }
+
+        /* Mobil nézet esetére */
+        @media only screen and (max-width: 768px) {
+            .console {
+                width: 90vw;
+                height: 90vw; /* Négyzetes arány fenntartása */
             }
         }
     </style>
@@ -60,10 +47,8 @@
         </div>
     </div>
 
-    <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
-
-    <!-- Rejtett input mező, ami a billentyűzetet aktiválja -->
-    <input type="text" id="hiddenInput" style="position: absolute; top: -1000px;">
+    <!-- Láthatatlan input mező -->
+    <input type="text" id="hiddenInput">
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -71,10 +56,10 @@
         const hiddenInput = document.getElementById('hiddenInput');
         let currentInput = '';
         const disclaimerText = 'Igen is vannak bugok a weboldalon de ha valami történik egy oldal refresh megoldhatja a problémát';
-        const audioPlayer = document.getElementById('audio-player');
         const commandHistory = [];
         let historyIndex = -1;
 
+        // Konzol frissítése
         function createInputLine() {
             const inputLine = document.createElement('p');
             inputLine.innerHTML = '> <span class="current-input"></span><span class="cursor">█</span>';
@@ -117,17 +102,6 @@
                 addOutputLine(time);
             } else if (currentInput.toLowerCase() === 'whoami') {
                 addOutputLine('student');
-            } else if (currentInput.toLowerCase() === 'play') {
-                audioPlayer.play();
-                addOutputLine('Zene lejátszódik... "stop"-al lehet megállitani');
-            } else if (currentInput.toLowerCase() === 'stop') {
-                if (!audioPlayer.paused) {
-                    audioPlayer.pause();
-                    audioPlayer.currentTime = 0;
-                    addOutputLine('A zene megállt');
-                } else {
-                    addOutputLine('A zene nem játszik, így nem lehet megállítani.');
-                }
             } else if (currentInput.toLowerCase() === 'whomade') {
                 addOutputLine('@zsombi9.b');
             } else if (currentInput.trim() !== '') {
@@ -144,6 +118,7 @@
             consoleBody.scrollTop = consoleBody.scrollHeight;
         }
 
+        // Key input kezelés
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 executeCommand();
@@ -177,22 +152,11 @@
 
         createInputLine();
 
-        // Billentyűzet automatikus felhozatala és a konzolablak felugrasztása
+        // Input fókuszálása
         hiddenInput.focus();
-        hiddenInput.addEventListener('focus', () => {
-            consoleBody.style.marginBottom = '200px'; // Konzolablak felfelé mozgatása
-        });
-
         hiddenInput.addEventListener('blur', () => {
             hiddenInput.focus(); // Ne lehessen bezárni a billentyűzetet
         });
-
-        setInterval(() => {
-            const cursor = document.querySelector('.cursor');
-            if (cursor) {
-                cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
-            }
-        }, 500);
     });
     </script>
 </body>
