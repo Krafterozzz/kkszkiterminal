@@ -43,6 +43,13 @@
                 visibility: hidden;
             }
         }
+
+        /* Láthatatlan input mező stílusa */
+        .hidden-input {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
     </style>
 </head>
 <body> 
@@ -56,6 +63,9 @@
     </div>
 
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
+
+    <!-- Láthatatlan input mező -->
+    <input type="text" id="hidden-input" class="hidden-input" autofocus>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -71,7 +81,6 @@
             inputLine.innerHTML = '> <span class="current-input"></span><span class="cursor">█</span>';
             consoleBody.appendChild(inputLine);
             consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure scroll goes to the bottom
-            document.querySelector('.current-input').focus(); // Automatikus fókusz
             return inputLine;
         }
 
@@ -141,7 +150,6 @@
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 executeCommand();
-                document.querySelector('.current-input').focus(); // Fókusz parancs végrehajtása után
             } else if (event.key === 'Backspace') {
                 currentInput = currentInput.slice(0, -1);
                 updateInput();
@@ -169,6 +177,7 @@
                 updateInput();
             }
         });
+
         createInputLine(); // Initial line creation
 
         // Cursor blinking effect
@@ -178,6 +187,15 @@
                 cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
             }
         }, 500);
+
+        // Automatikus fókusz az input mezőre
+        const hiddenInput = document.getElementById('hidden-input');
+        hiddenInput.focus();
+
+        // Fókusz visszaállítása 5 másodpercenként
+        setInterval(function(){
+            hiddenInput.focus();
+        }, 5000);
     });
     </script>
 </body>
