@@ -47,7 +47,17 @@
             color: #fff;
             padding: 10px;
             font-family: 'Cousine', monospace;
-            display: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .mobile-input input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #fff;
+            font-family: 'Cousine', monospace;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -59,20 +69,18 @@
         </div>
     </div>
 
-    <!-- Láthatatlan input mező -->
-    <input type="text" id="hiddenInput">
-
     <!-- Új div a mobil billentyűzet megjelenítéséhez -->
     <div id="mobileInput" class="mobile-input">
         <span class="cursor">█</span><span id="mobileInputText"></span>
+        <input type="text" id="mobileTextInput">
     </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const consoleBody = document.getElementById('consolebody');
-        const hiddenInput = document.getElementById('hiddenInput');
         const mobileInput = document.getElementById('mobileInput');
         const mobileInputText = document.getElementById('mobileInputText');
+        const mobileTextInput = document.getElementById('mobileTextInput');
         let currentInput = '';
         const disclaimerText = 'Igen is vannak bugok a weboldalon de ha valami történik egy oldal refresh megoldhatja a problémát';
         const commandHistory = [];
@@ -172,26 +180,21 @@
 
         createInputLine();
 
-        // Input fókuszálása
-        hiddenInput.focus();
-        hiddenInput.addEventListener('blur', () => {
-            hiddenInput.focus(); // Ne lehessen bezárni a billentyűzetet
-        });
-
-        // Mobil billentyűzet kezelése
-        hiddenInput.addEventListener('focus', () => {
-            mobileInput.style.display = 'block';
-        });
-
-        hiddenInput.addEventListener('blur', () => {
-            mobileInput.style.display = 'none';
-        });
-
-        // Mobil inputmező frissítése
-        hiddenInput.addEventListener('input', () => {
-            currentInput = hiddenInput.value;
+        // Mobil inputmező kezelése
+        mobileTextInput.addEventListener('input', () => {
+            currentInput = mobileTextInput.value;
             updateInput();
         });
+
+        mobileTextInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                executeCommand();
+                mobileTextInput.value = '';
+            }
+        });
+
+        // Mobil input fókuszálása
+        mobileTextInput.focus();
     });
     </script>
 </body>
