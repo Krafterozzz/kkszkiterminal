@@ -71,6 +71,7 @@
             inputLine.innerHTML = '> <span class="current-input"></span><span class="cursor">█</span>';
             consoleBody.appendChild(inputLine);
             consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure scroll goes to the bottom
+            document.querySelector('.current-input').focus(); // Automatikus fókusz
             return inputLine;
         }
 
@@ -140,6 +141,7 @@
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 executeCommand();
+                document.querySelector('.current-input').focus(); // Fókusz parancs végrehajtása után
             } else if (event.key === 'Backspace') {
                 currentInput = currentInput.slice(0, -1);
                 updateInput();
@@ -176,14 +178,6 @@
                 cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
             }
         }, 500);
-
-        // Automatikus fókusz az input mezőre
-        setInterval(function(){
-            const inputs = document.querySelector('.current-input');
-            if (inputs) {
-                inputs.focus();
-            }
-        }, 5000); // Fókusz 5 másodpercenként
     });
     </script>
 </body>
