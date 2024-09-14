@@ -65,7 +65,7 @@
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
 
     <!-- Láthatatlan input mező -->
-    <input type="text" id="hidden-input" class="hidden-input" autofocus>
+    <input type="text" id="hidden-input" class="hidden-input" autofocus disabled>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -192,10 +192,20 @@
         const hiddenInput = document.getElementById('hidden-input');
         hiddenInput.focus();
 
+        // Fókusz visszaállítása, ha a felhasználó bárhová kattint az oldalon
+        document.addEventListener('click', function() {
+            hiddenInput.focus();
+        });
+
         // Fókusz visszaállítása 5 másodpercenként
         setInterval(function(){
             hiddenInput.focus();
-        }, 5000);
+        }, 500);
+
+        // Scroll terminal up when keyboard appears
+        window.addEventListener('resize', function() {
+            consoleBody.scrollTop = consoleBody.scrollHeight;
+        });
     });
     </script>
 </body>
