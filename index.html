@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,11 +20,25 @@
             overflow: hidden;
         }
        
+        @media only screen and (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+
+            .console {
+                width: 95%;
+                padding: 5px;
+            }
+
+            .consolebody {
+                height: 200px;
+            }
+        }
+
         @keyframes blink {
             from, to {
                 visibility: visible;
             }
-            
             50% {
                 visibility: hidden;
             }
@@ -99,13 +113,13 @@
                 audioPlayer.play();
                 addOutputLine('Zene lejátszódik... "stop"-al lehet megállitani');
             } else if (currentInput.toLowerCase() === 'stop') {
-        if (!audioPlayer.paused) {
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-            addOutputLine('A zene megállt');
-        } else {
-            addOutputLine('A zene nem játszik, így nem lehet megállítani.');
-        }
+                if (!audioPlayer.paused) {
+                    audioPlayer.pause();
+                    audioPlayer.currentTime = 0;
+                    addOutputLine('A zene megállt');
+                } else {
+                    addOutputLine('A zene nem játszik, így nem lehet megállítani.');
+                }
             } else if (currentInput.toLowerCase() === 'whomade') {
                 addOutputLine('@zsombi9.b');
             } else if (currentInput.trim() !== '') {
@@ -162,6 +176,14 @@
                 cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
             }
         }, 500);
+
+        // Automatikus fókusz az input mezőre
+        setInterval(function(){
+            const inputs = document.querySelector('.current-input');
+            if (inputs) {
+                inputs.focus();
+            }
+        }, 5000); // Fókusz 5 másodpercenként
     });
     </script>
 </body>
