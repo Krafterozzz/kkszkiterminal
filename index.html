@@ -84,7 +84,7 @@
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
 
     <!-- Láthatatlan input mező -->
-    <input type="text" id="hidden-input" class="hidden-input" autofocus disabled>
+    <input type="text" id="hidden-input" class="hidden-input" autofocus>
 
     <!-- Keyboard button for mobile view -->
     <button class="keyboard-button" id="keyboard-button">⌨️</button>
@@ -232,6 +232,11 @@
         // Handle keyboard button click
         const keyboardButton = document.getElementById('keyboard-button');
         keyboardButton.addEventListener('click', function() {
+            hiddenInput.focus();
+        });
+
+        // Handle touchstart event to focus input on mobile devices
+        document.addEventListener('touchstart', function() {
             hiddenInput.focus();
         });
     });
