@@ -11,11 +11,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <title>KKSZKI TERMINÁL</title>
+    <style>
+        /* Style adjustments */
+        
+    </style>
 </head>
 <body> 
     <div class="container">
-        <div class="mac-terminal">
-            <div class="header">
+        <div class="mac-terminal" id="draggable-container">
+            <div class="header" id="draggable-header">
                 <div class="header__op">
                     <span class="header__op-icon header__op-icon--red"></span>
                     <span class="header__op-icon header__op-icon--yellow"></span>
@@ -36,7 +40,7 @@
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
 
     <!-- Visible input field to trigger keyboard -->
-    <input type="text" id="visible-input">
+    <input type="text" id="visible-input" style="position: absolute; top: -9999px;"> <!-- Rejtett input mező -->
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -155,6 +159,7 @@
             }
         });
 
+        
         // Focus the visible input field on mobile devices
         document.addEventListener('click', function() {
             visibleInput.focus();
@@ -174,6 +179,34 @@
         if (window.innerWidth <= 768) {
             visibleInput.focus();
         }
+
+        // Draggable functionality
+        const draggableContainer = document.getElementById('draggable-container');
+        const draggableHeader = document.getElementById('draggable-header');
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        draggableHeader.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            offsetX = e.clientX - draggableContainer.offsetLeft;
+            offsetY = e.clientY - draggableContainer.offsetTop;
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                draggableContainer.style.left = `${e.clientX - offsetX}px`;
+                draggableContainer.style.top = `${e.clientY - offsetY}px`;
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+        
     });
     </script>
 </body>
