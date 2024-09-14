@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang=hu">
+<html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:description" content='KKSZKI TERMINÁL'>
+    <meta property="og:description" content='KKSZKI INDULÓ'>
     <link rel="stylesheet" href="style.css">
     <meta property="og:image" content="https://cms.kando.intezmeny.edir.hu/uploads/thumbnail_imageedit_3_3893777332_c4067ae601.png">
     <link rel="shortcut icon" href="https://cms.kando.intezmeny.edir.hu/uploads/thumbnail_imageedit_3_3893777332_c4067ae601.png" type="image/png">
@@ -11,37 +11,38 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
-    <title>KKSZKI TERMINÁL</title>
+    <title>KKSZKI INDULÓ</title>
     <style>
-        
+        .cursor {
+            animation: blink 1s step-end infinite;
         }
         body {
             overflow: hidden;
         }
        
         @media only screen and (max-width: 768px) {
-    body {
-        font-size: 14px;
-    }
+            body {
+                font-size: 14px;
+            }
 
-    .console {
-        width: 95%;
-        padding: 5px;
-    }
+            .console {
+                width: 95%;
+                padding: 5px;
+            }
 
-    .consolebody {
-        height: 200px;
-    }
-}
+            .consolebody {
+                height: 200px;
+            }
+        }
 
-@keyframes blink {
-    from, to {
-        visibility: visible;
-    }
-    50% {
-        visibility: hidden;
-    }
-}
+        @keyframes blink {
+            from, to {
+                visibility: visible;
+            }
+            50% {
+                visibility: hidden;
+            }
+        }
     </style>
 </head>
 <body> 
@@ -51,15 +52,18 @@
         </header>
         <div class="consolebody" id="consolebody">
             <p>> írd be a help parancsok listájának megtekintéséhez</p>
-
-       
+        </div>
     </div>
 
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
 
+    <!-- Hidden input field to trigger keyboard -->
+    <input type="text" id="hidden-input" style="position: absolute; top: -9999px; left: -9999px;">
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const consoleBody = document.getElementById('consolebody');
+        const hiddenInput = document.getElementById('hidden-input');
         let currentInput = '';
         const disclaimerText = 'Igen is vannak bugok a weboldalon de ha valami történik egy oldal refresh megoldhatja a problémát';
         const audioPlayer = document.getElementById('audio-player');
@@ -113,13 +117,13 @@
                 audioPlayer.play();
                 addOutputLine('Zene lejátszódik... "stop"-al lehet megállitani');
             } else if (currentInput.toLowerCase() === 'stop') {
-        if (!audioPlayer.paused) {
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-            addOutputLine('A zene megállt');
-        } else {
-            addOutputLine('A zene nem játszik, így nem lehet megállítani.');
-        }
+                if (!audioPlayer.paused) {
+                    audioPlayer.pause();
+                    audioPlayer.currentTime = 0;
+                    addOutputLine('A zene megállt');
+                } else {
+                    addOutputLine('A zene nem játszik, így nem lehet megállítani.');
+                }
             } else if (currentInput.toLowerCase() === 'whomade') {
                 addOutputLine('@zsombi9.b');
             } else if (currentInput.trim() !== '') {
@@ -177,22 +181,10 @@
             }
         }, 500);
 
- // Mobil inputmező kezelése
- mobileTextInput.addEventListener('input', () => {
-            currentInput = mobileTextInput.value;
-            updateInput();
-        });
-
-        mobileTextInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                executeCommand();
-                mobileTextInput.value = '';
-            }
-        });
-
-        // Mobil input fókuszálása
-        mobileTextInput.focus();
-   
+        // Focus the hidden input field on mobile devices
+        if (window.innerWidth <= 768) {
+            hiddenInput.focus();
+        }
     });
     </script>
 </body>
