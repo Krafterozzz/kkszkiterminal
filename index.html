@@ -57,13 +57,9 @@
 
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
 
-    <!-- Hidden input field to trigger keyboard -->
-    <input type="text" id="hidden-input" style="position: absolute; top: -9999px; left: -9999px;">
-
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const consoleBody = document.getElementById('consolebody');
-        const hiddenInput = document.getElementById('hidden-input');
         let currentInput = '';
         const disclaimerText = 'Igen is vannak bugok a weboldalon de ha valami történik egy oldal refresh megoldhatja a problémát';
         const audioPlayer = document.getElementById('audio-player');
@@ -180,11 +176,6 @@
                 cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
             }
         }, 500);
-
-        // Focus the hidden input field on mobile devices
-        if (window.innerWidth <= 768) {
-            hiddenInput.focus();
-        }
     });
     </script>
 </body>
