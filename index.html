@@ -53,12 +53,6 @@
         <div class="consolebody" id="consolebody">
             <p>> írd be a help parancsok listájának megtekintéséhez</p>
 
-            <form id="typerForm">
-                <input id="typer" style="position:relative; left:-100em;"/>
-                </form>
-                
-                <div id="myInput" style="border:2px solid #4AA; width:6em; height:1em; font-size:2em"></div>
-                <div style="height:20em; background-color:#eee">
         </div>
     </div>
 
@@ -185,26 +179,7 @@
         }, 500);
 
 
-        $('body').click(function() {
-    $('#typer').focus();
-    $('#typer').select();
-
-});
-
-
-$('#typerForm').submit(function() {
-    //alert("submit");
-    setTimeout("$('#typer').focus();", 1000);
-    return false;
-});
-
-$('#typer').bind('keyup', function(e) {
-    var input = $.trim($(this).val());
-    // some lines of code..
-    $('#myInput').text(input);
-    //...
-    //$(this).val('').focus(); // clean up
-});
+   
     });
     </script>
 </body>
