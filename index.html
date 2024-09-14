@@ -13,7 +13,6 @@
 
     <title>KKSZKI INDULÓ</title>
     <style>
-
         /* Láthatatlan input */
         input[type="text"] {
             position: absolute;
@@ -37,6 +36,19 @@
                 height: 90vw; /* Négyzetes arány fenntartása */
             }
         }
+
+        /* Új stílus a mobil billentyűzet megjelenítéséhez */
+        .mobile-input {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            font-family: 'Cousine', monospace;
+            display: none;
+        }
     </style>
 </head>
 <body> 
@@ -50,10 +62,17 @@
     <!-- Láthatatlan input mező -->
     <input type="text" id="hiddenInput">
 
+    <!-- Új div a mobil billentyűzet megjelenítéséhez -->
+    <div id="mobileInput" class="mobile-input">
+        <span class="cursor">█</span><span id="mobileInputText"></span>
+    </div>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const consoleBody = document.getElementById('consolebody');
         const hiddenInput = document.getElementById('hiddenInput');
+        const mobileInput = document.getElementById('mobileInput');
+        const mobileInputText = document.getElementById('mobileInputText');
         let currentInput = '';
         const disclaimerText = 'Igen is vannak bugok a weboldalon de ha valami történik egy oldal refresh megoldhatja a problémát';
         const commandHistory = [];
@@ -62,7 +81,7 @@
         // Konzol frissítése
         function createInputLine() {
             const inputLine = document.createElement('p');
-            inputLine.innerHTML = '> <span class="current-input"></span><span class="cursor">█</span>';
+            inputLine.innerHTML = '<span class="cursor">█</span> <span class="current-input"></span>';
             consoleBody.appendChild(inputLine);
             consoleBody.scrollTop = consoleBody.scrollHeight;
             return inputLine;
@@ -74,6 +93,7 @@
             if (currentInputSpan) {
                 currentInputSpan.textContent = currentInput;
             }
+            mobileInputText.textContent = currentInput;
         }
 
         function addOutputLine(text) {
@@ -156,6 +176,21 @@
         hiddenInput.focus();
         hiddenInput.addEventListener('blur', () => {
             hiddenInput.focus(); // Ne lehessen bezárni a billentyűzetet
+        });
+
+        // Mobil billentyűzet kezelése
+        hiddenInput.addEventListener('focus', () => {
+            mobileInput.style.display = 'block';
+        });
+
+        hiddenInput.addEventListener('blur', () => {
+            mobileInput.style.display = 'none';
+        });
+
+        // Mobil inputmező frissítése
+        hiddenInput.addEventListener('input', () => {
+            currentInput = hiddenInput.value;
+            updateInput();
         });
     });
     </script>
