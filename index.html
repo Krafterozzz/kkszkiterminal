@@ -3,66 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:description" content='KKSZKI TERMINAL'>
-    <link rel="stylesheet" href="style.css">
+    <meta property="og:description" content='KKSZKI TERMINÁL'>
+    <link rel="stylesheet" href="styleasd.css">
     <meta property="og:image" content="https://cms.kando.intezmeny.edir.hu/uploads/thumbnail_imageedit_3_3893777332_c4067ae601.png">
     <link rel="shortcut icon" href="https://cms.kando.intezmeny.edir.hu/uploads/thumbnail_imageedit_3_3893777332_c4067ae601.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
-    <title>KKSZKI TERMINAL</title>
-    <style>
-        .cursor {
-            animation: blink 1s step-end infinite;
-        }
-        body {
-            overflow: hidden;
-        }
-       
-        @media only screen and (max-width: 768px) {
-            body {
-                font-size: 14px;
-            }
-
-            .console {
-                width: 95%;
-                padding: 5px;
-            }
-
-            .consolebody {
-                height: 200px;
-            }
-        }
-
-        @keyframes blink {
-            from, to {
-                visibility: visible;
-            }
-            50% {
-                visibility: hidden;
-            }
-        }
-
-        /* Style the hidden input to blend into the background */
-        #visible-input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            z-index: -1;
-        }
-    </style>
+    <title>KKSZKI TERMINÁL</title>
 </head>
 <body> 
-    <div class="console">
-        <header>
-            guest@kkszki.local
-        </header>
-        <div class="consolebody" id="consolebody">
-            <p>> írd be a help parancsok listájának megtekintéséhez</p>
+    <div class="container">
+        <div class="mac-terminal">
+            <div class="header">
+                <div class="header__op">
+                    <span class="header__op-icon header__op-icon--red"></span>
+                    <span class="header__op-icon header__op-icon--yellow"></span>
+                    <span class="header__op-icon header__op-icon--green"></span>
+                </div>
+                <div class="header__title">root@kkszki.local:~/terminal</div>
+                <div class="header__empty"></div>
+            </div>
+            <div class="body" id="consolebody">
+                <div class="body__row"></div>
+                <div class="body__row">
+                    <span> > írd be a help parancsok listájának megtekintéséhez</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -82,8 +49,9 @@
         let historyIndex = -1;
         
         function createInputLine() {
-            const inputLine = document.createElement('p');
-            inputLine.innerHTML = '> <span class="current-input"></span><span class="cursor">█</span>';
+            const inputLine = document.createElement('div');
+            inputLine.classList.add('body__row');
+            inputLine.innerHTML = '<span class="body__row-arrow">></span> <span class="current-input"></span><span class="cursor">█</span>';
             consoleBody.appendChild(inputLine);
             consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure scroll goes to the bottom
             return inputLine;
@@ -98,7 +66,8 @@
         }
 
         function addOutputLine(text) {
-            const outputLine = document.createElement('p');
+            const outputLine = document.createElement('div');
+            outputLine.classList.add('body__row');
             outputLine.textContent = text;
             consoleBody.insertBefore(outputLine, consoleBody.lastChild); // Insert before the input line
             consoleBody.scrollTop = consoleBody.scrollHeight; // Scroll to bottom after output
