@@ -1,67 +1,110 @@
+.cursor {
+  animation: blink 1s step-end infinite;
+}
 body {
-    min-width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: #eee
-    
-  }
-  
-  .console {
-    font-family: 'Cousine';
-    width: 700px;
-    height: 450px;
-    box-sizing: border-box;
-    margin: auto;
-  }
-  
-  .console header {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    background-color: #555;
-    height: 45px;
-    line-height: 45px;
-    text-align: center;
-    color: #DDD;
-  }
-  
-  .console .consolebody {
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    box-sizing: border-box;
-    padding: 20px;
-    height: calc(100% - 40px);
-    overflow: scroll;
-    background-color: #000;
-    color: #63de00;
-  }
-  
-  .console .consolebody p {
-    line-height: 1.5rem;
+  overflow: hidden;
+  font-family: 'Cousine', monospace;
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+      font-size: 14px;
   }
 
-  .cousine-regular {
-    font-family: "Cousine", monospace;
-    font-weight: 400;
-    font-style: normal;
+  .console {
+      width: 95%;
+      padding: 5px;
   }
-  
-  .cousine-bold {
-    font-family: "Cousine", monospace;
-    font-weight: 700;
-    font-style: normal;
+
+  .consolebody {
+      height: 200px;
   }
-  
-  .cousine-regular-italic {
-    font-family: "Cousine", monospace;
-    font-weight: 400;
-    font-style: italic;
+}
+
+@keyframes blink {
+  from, to {
+      visibility: visible;
   }
-  
-  .cousine-bold-italic {
-    font-family: "Cousine", monospace;
-    font-weight: 700;
-    font-style: italic;
+  50% {
+      visibility: hidden;
   }
+}
+
+/* Style the hidden input to blend into the background */
+#visible-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: -1;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   
+}
+
+.mac-terminal {
+  background-color: #1e1e1e;
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+  color: #1ae127;
+  font-size: 16px;
+  width: 1000px;
+  height: 550px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 13px;
+  background-color: #333;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.header__op {
+  display: flex;
+  gap: 5px;
+}
+
+.header__op-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.header__op-icon--red {
+  background-color: #ff5f56;
+}
+
+.header__op-icon--yellow {
+  background-color: #ffbd2e;
+}
+
+.header__op-icon--green {
+  background-color: #27c93f;
+}
+
+.header__title {
+  flex-grow: 1;
+  text-align: center;
+  color: #ffffff;
+  position: relative;
+  left: -20px;
+}
+
+.body {
+  padding: 15px;
+}
+
+.body__row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
