@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang=hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
 
     <title>KKSZKI INDULÓ</title>
     <style>
-        .cursor {
+         .cursor {
             animation: blink 1s step-end infinite;
         }
         body {
@@ -21,54 +21,28 @@
         }
        
         @media only screen and (max-width: 768px) {
-            body {
-                font-size: 14px;
-            }
+    body {
+        font-size: 14px;
+    }
 
-            .console {
-                width: 95%;
-                padding: 5px;
-            }
+    .console {
+        width: 95%;
+        padding: 5px;
+    }
 
-            .consolebody {
-                height: 200px;
-            }
+    .consolebody {
+        height: 200px;
+    }
+}
 
-            /* Button styling for mobile view */
-            .keyboard-button {
-                position: fixed;
-                top: 10px;
-                left: 10px;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                background-color: #333;
-                color: white;
-                border: none;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 24px;
-                cursor: pointer;
-                z-index: 1000;
-            }
-        }
-
-        @keyframes blink {
-            from, to {
-                visibility: visible;
-            }
-            50% {
-                visibility: hidden;
-            }
-        }
-
-        /* Láthatatlan input mező stílusa */
-        .hidden-input {
-            position: absolute;
-            top: -9999px;
-            left: -9999px;
-        }
+@keyframes blink {
+    from, to {
+        visibility: visible;
+    }
+    50% {
+        visibility: hidden;
+    }
+}
     </style>
 </head>
 <body> 
@@ -78,16 +52,17 @@
         </header>
         <div class="consolebody" id="consolebody">
             <p>> írd be a help parancsok listájának megtekintéséhez</p>
+
+            <form id="typerForm">
+                <input id="typer" style="position:relative; left:-100em;"/>
+                </form>
+                
+                <div id="myInput" style="border:2px solid #4AA; width:6em; height:1em; font-size:2em"></div>
+                <div style="height:20em; background-color:#eee">
         </div>
     </div>
 
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
-
-    <!-- Láthatatlan input mező -->
-    <input type="text" id="hidden-input" class="hidden-input" autofocus>
-
-    <!-- Keyboard button for mobile view -->
-    <button class="keyboard-button" id="keyboard-button">⌨️</button>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -145,13 +120,13 @@
                 audioPlayer.play();
                 addOutputLine('Zene lejátszódik... "stop"-al lehet megállitani');
             } else if (currentInput.toLowerCase() === 'stop') {
-                if (!audioPlayer.paused) {
-                    audioPlayer.pause();
-                    audioPlayer.currentTime = 0;
-                    addOutputLine('A zene megállt');
-                } else {
-                    addOutputLine('A zene nem játszik, így nem lehet megállítani.');
-                }
+        if (!audioPlayer.paused) {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            addOutputLine('A zene megállt');
+        } else {
+            addOutputLine('A zene nem játszik, így nem lehet megállítani.');
+        }
             } else if (currentInput.toLowerCase() === 'whomade') {
                 addOutputLine('@zsombi9.b');
             } else if (currentInput.trim() !== '') {
@@ -199,7 +174,6 @@
                 updateInput();
             }
         });
-
         createInputLine(); // Initial line creation
 
         // Cursor blinking effect
@@ -210,35 +184,27 @@
             }
         }, 500);
 
-        // Automatikus fókusz az input mezőre
-        const hiddenInput = document.getElementById('hidden-input');
-        hiddenInput.focus();
 
-        // Fókusz visszaállítása, ha a felhasználó bárhová kattint az oldalon
-        document.addEventListener('click', function() {
-            hiddenInput.focus();
-        });
+        $('body').click(function() {
+    $('#typer').focus();
+    $('#typer').select();
 
-        // Fókusz visszaállítása 5 másodpercenként
-        setInterval(function(){
-            hiddenInput.focus();
-        }, 500);
+});
 
-        // Scroll terminal up when keyboard appears
-        window.addEventListener('resize', function() {
-            consoleBody.scrollTop = consoleBody.scrollHeight;
-        });
 
-        // Handle keyboard button click
-        const keyboardButton = document.getElementById('keyboard-button');
-        keyboardButton.addEventListener('click', function() {
-            hiddenInput.focus();
-        });
+$('#typerForm').submit(function() {
+    //alert("submit");
+    setTimeout("$('#typer').focus();", 1000);
+    return false;
+});
 
-        // Handle touchstart event to focus input on mobile devices
-        document.addEventListener('touchstart', function() {
-            hiddenInput.focus();
-        });
+$('#typer').bind('keyup', function(e) {
+    var input = $.trim($(this).val());
+    // some lines of code..
+    $('#myInput').text(input);
+    //...
+    //$(this).val('').focus(); // clean up
+});
     });
     </script>
 </body>
