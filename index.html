@@ -43,6 +43,17 @@
                 visibility: hidden;
             }
         }
+
+        /* Style the hidden input to blend into the background */
+        #visible-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            z-index: -1;
+        }
     </style>
 </head>
 <body> 
@@ -57,9 +68,13 @@
 
     <audio id="audio-player" src="/Users/zsombi/Downloads/goofy-ahh-sounds.mp3"></audio>
 
+    <!-- Visible input field to trigger keyboard -->
+    <input type="text" id="visible-input">
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const consoleBody = document.getElementById('consolebody');
+        const visibleInput = document.getElementById('visible-input');
         let currentInput = '';
         const disclaimerText = 'Igen is vannak bugok a weboldalon de ha valami történik egy oldal refresh megoldhatja a problémát';
         const audioPlayer = document.getElementById('audio-player');
@@ -167,6 +182,12 @@
                 updateInput();
             }
         });
+
+        // Focus the visible input field on mobile devices
+        document.addEventListener('click', function() {
+            visibleInput.focus();
+        });
+
         createInputLine(); // Initial line creation
 
         // Cursor blinking effect
@@ -176,6 +197,11 @@
                 cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
             }
         }, 500);
+
+        // Focus the visible input field on mobile devices
+        if (window.innerWidth <= 768) {
+            visibleInput.focus();
+        }
     });
     </script>
 </body>
