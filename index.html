@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:description" content='KKSZKI TERMINÁL'>
+    <meta property="og:image" content="https://cms.kando.intezmeny.edir.hu/uploads/thumbnail_imageedit_3_3893777332_c4067ae601.png">
     <link rel="stylesheet" href="style.css">
     <link rel=“stylesheet” href="…/bootstrap-3.3.7/css/bootstrap.min.css?newcache01">
-    <meta property="og:image" content="https://cms.kando.intezmeny.edir.hu/uploads/thumbnail_imageedit_3_3893777332_c4067ae601.png">
     <link rel="shortcut icon" href="https://cms.kando.intezmeny.edir.hu/uploads/thumbnail_imageedit_3_3893777332_c4067ae601.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <title>KKSZKI TERMINÁL</title>
-    <style>
-        /* Style adjustments */
-        
-    </style>
 </head>
 <body> 
     <div class="container">
@@ -58,7 +54,7 @@
             inputLine.classList.add('body__row');
             inputLine.innerHTML = '<span class="body__row-arrow">></span> <span class="current-input"></span><span class="cursor">█</span>';
             consoleBody.appendChild(inputLine);
-            consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure scroll goes to the bottom
+            scrollToBottom();
             return inputLine;
         }
 
@@ -75,7 +71,7 @@
             outputLine.classList.add('body__row');
             outputLine.textContent = text;
             consoleBody.insertBefore(outputLine, consoleBody.lastChild); // Insert before the input line
-            consoleBody.scrollTop = consoleBody.scrollHeight; // Scroll to bottom after output
+            scrollToBottom();
         }
 
         function executeCommand() {
@@ -123,7 +119,11 @@
             currentInput = '';  // Clear the current input
             historyIndex = -1;  // Reset history index
             updateInput();
-            consoleBody.scrollTop = consoleBody.scrollHeight; // Ensure the focus stays on the last line
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            consoleBody.scrollTop = consoleBody.scrollHeight;
         }
 
         visibleInput.addEventListener('input', function(event) {
@@ -135,9 +135,6 @@
             if (event.key === 'Enter') {
                 executeCommand();
                 visibleInput.value = ''; // Clear the visible input field
-            } else if (event.key === 'Backspace') {
-                currentInput = currentInput.slice(0, -1);
-                updateInput();
             } else if (event.key === 'ArrowUp') {
                 if (commandHistory.length > 0) {
                     if (historyIndex < commandHistory.length - 1) {
@@ -160,7 +157,6 @@
             }
         });
 
-        
         // Focus the visible input field on mobile devices
         document.addEventListener('click', function() {
             visibleInput.focus();
@@ -207,7 +203,6 @@
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         }
-        
     });
     </script>
 </body>
