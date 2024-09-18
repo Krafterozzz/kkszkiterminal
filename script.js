@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const audioPlayer = document.getElementById('audio-player');
     const commandHistory = [];
     let historyIndex = -1;
-    let timeInterval = null; // Variable to store the interval ID
     
     const maxLineLength = 80; // Maximális sorhossz
 
@@ -96,20 +95,9 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollToBottom();
     }
 
-    function updateTime() {
-        const time = new Date().toLocaleTimeString();
-        addOutputLine(time);
-    }
-
     function executeCommand(command = null) {
         if (command) {
             currentInput = command;
-        }
-
-        // Clear any existing time interval
-        if (timeInterval) {
-            clearInterval(timeInterval);
-            timeInterval = null;
         }
     
         if (currentInput.toLowerCase() === 'snake') {
@@ -137,12 +125,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const date = new Date().toLocaleDateString();
             addOutputLine(date);
         } else if (currentInput.toLowerCase() === 'time') {
-            updateTime();
-            timeInterval = setInterval(updateTime, 1000); // Update time every second
+            const time = new Date().toLocaleTimeString();
+            addOutputLine(time);
         } else if (currentInput.toLowerCase() === 'whoami') {
             addOutputLine('root');
-        } else if (currentInput.toLowerCase() === 'gg') {
-            addOutputLine('Köszike hogy értékeled a munkámat!');
         } else if (currentInput.toLowerCase() === 'play') {
             audioPlayer.play();
             addOutputLine('Zene lejátszódik... "stop"-al lehet megállitani');
@@ -374,28 +360,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+    
             for (let i = 0; i < snake.length; i++) {
                 ctx.fillStyle = i == 0 ? 'green' : 'white';
-                ctx.fillRect(snake[i].x, snake[i].y, box, box); // Hiányzott a zárójel
-        
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+    
                 ctx.strokeStyle = 'red';
                 ctx.strokeRect(snake[i].x, snake[i].y, box, box);
             }
-        
+    
             ctx.fillStyle = 'red';
             ctx.fillRect(food.x, food.y, box, box);
-        
+    
             let snakeX = snake[0].x;
             let snakeY = snake[0].y;
-        
+    
             if (d == 'LEFT') snakeX -= box;
             if (d == 'UP') snakeY -= box;
             if (d == 'RIGHT') snakeX += box;
             if (d == 'DOWN') snakeY += box;
-        
-            // Add code here to update the snake's position and check for collisions, etc.
-        }
     
             if (snakeX == food.x && snakeY == food.y) {
                 score++;
@@ -431,4 +414,4 @@ document.addEventListener('DOMContentLoaded', function() {
     
         let game = setInterval(draw, 100);
     }
-);
+});
